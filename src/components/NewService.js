@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,TouchableOpacity} from "react";
 import './newService.css';
 
 import { auth, db } from "../firebase";
-import {  useNavigate } from "react-router-dom";
+import {  useNavigate ,Link} from "react-router-dom";
 import { uid } from "uid";
 import  {set, ref, onValue, remove, update,  } from "firebase/database";
 
 //icons
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HomeIcon from '@mui/icons-material/Home';
-import CheckIcon from '@mui/icons-material/Check';
+
 //icons
 
 export default function CreateNewService(){
@@ -19,6 +18,12 @@ export default function CreateNewService(){
     const navigate= useNavigate();
     const[service,setService] =useState('');
     const[services,setServices] =useState([]);
+    const [isAdding,setisAdding] = useState(false);
+    const [addingInput,setaddingInput] =useState({
+        name:'',
+        content:'',
+        workingHours:''
+    });
 
     useEffect(()=>{
         auth.onAuthStateChanged(user => {
@@ -30,6 +35,7 @@ export default function CreateNewService(){
                         setServices((oldArray)=> [...oldArray,service]))
                     })
                 })
+                console.log(services['service']);
             }else if(!user){
                 navigate('/');
             }
@@ -38,17 +44,28 @@ export default function CreateNewService(){
 
     //add
     const addService = ()=>{
-        const uidd= uid();
-        if(service!== ''){
-            set(ref(db,"/services/"+uidd ), {
-                service: service,
-                serviceid: uidd,
-            })
-        }else{
-            alert("gabole");
+        if(addingInput.name === ''){
+            alert('Please Input Service Name')
+            return
+        }else if(addingInput.content === ''){
+            alert('Please Input Service Description')
+            return
+        }else if(addingInput.workingHours === ''){
+            alert('Please Input Service Name')
+            return
         }
-  
+        const uidd= uid();
+            set(ref(db,"/services/"+uidd ), {
+                service: addingInput.name,
+                serviceid: uidd,
+                content: addingInput.content,
+                workingHours: addingInput.workingHours
+            })
+     
+        setisAdding(false)
         setService('');
+        setIsEdit(false);
+        setaddingInput('');
     };
 
     //delete
@@ -67,21 +84,44 @@ export default function CreateNewService(){
          update(ref(db,'services/'+tempUid),{
             service: service,
             serviceid: tempUid,
+
         });
         setService('');
-        setIsEdit(false);
+        
     }
     
-    return(<div className="newServicePage">
-        <h1>Add Services</h1>
-        <input className="add-edit-input" type='text' placeholder="Service Name" value={service} onChange={(e) => setService(e.target.value)}></input>
+    return(
+    <div className="content">
+       
+       
         {services.map(service => { return(
-                <div className="service"> <h1 key={service.serviceid}>{service.service}</h1>
+            
+                <div className="service-preview " key={service.serviceid}>  
+                 <Link to={{pathname:'/serviceDetails/'+service.serviceid}}>
+                <h2 >{service.service}</h2>
+                </Link>
                 <EditIcon className="edit-button" onClick={()=>handleUpdate(service)}>Update</EditIcon>
                 <DeleteIcon className="delete-button" onClick={()=>handleDelete(service.serviceid)}>Delete</DeleteIcon>
                 </div>
+                /* 
+                 */
+              
+                
             )}) }
-        {isEdit ? (<CheckIcon  className="add-confirm-icon" onClick={confirmUpdate}>Confirm</CheckIcon>): (<AddIcon  className="add-confirm-icon" onClick={addService}>add</AddIcon >)} 
+        {/* {isEdit ? (<CheckIcon  className="add-confirm-icon" onClick={confirmUpdate}>Confirm</CheckIcon>): (<AddIcon  className="add-confirm-icon" onClick={addService}>add</AddIcon >)}  */}
         <HomeIcon className="home-icon" onClick={ () =>navigate('/homepage')}>HOME</HomeIcon>
+        <div className="register-service-container">
+        {isAdding ? <>   
+                <input type="text"  placeholder="Service Name" value={addingInput.name} onChange={(e)=> setaddingInput({...addingInput,name:e.target.value})}/>
+                <input type="text"  placeholder="Service Description" value={addingInput.content} onChange={(e)=> setaddingInput({...addingInput,content:e.target.value})}/>
+                <input type="text"  placeholder="Workdays" value={addingInput.workingHours} onChange={(e)=> setaddingInput({...addingInput,workingHours:e.target.value})}/>
+                <button onClick={addService}>Register</button>
+                <button onClick={()=>setisAdding(false)}>Go Back</button></>
+                
+                :
+                
+                <>   
+                <button className="register-button" onClick={()=>setisAdding(true)}>Register New Service</button></>}
+        </div>
     </div>)
 }

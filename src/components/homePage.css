@@ -7,3 +7,9 @@
     background: red;
     color: white;
   }
+
+.field{
+  margin-top: 20;
+  margin-bottom: 20;
+  display: block;
+}
