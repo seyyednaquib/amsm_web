@@ -22,7 +22,7 @@ export default function Welcome(){
     useEffect(()=>{
         auth.onAuthStateChanged((user)=>{
             if(user){
-                navigate('/createNewService');
+                navigate('/servicePage');
             }
         });
     })
@@ -55,7 +55,6 @@ export default function Welcome(){
     }
 
     return(<div className="welcome">
-      
         <h1>Management Melawis Apartment</h1>
         <img src={LogoPNG} className="logopng" alt="logo aspiras"/>
         <div className="login-register-container">
@@ -71,8 +70,8 @@ export default function Welcome(){
             
             :
             
-            <>   <input type="email" onChange={handleEmailChange} value={email}/>
-            <input type="password" onChange={handlePasswordChange} value={password}/>
+            <>   <input type="email" placeholder="email" onChange={handleEmailChange} value={email}/>
+            <input type="password" placeholder="password" onChange={handlePasswordChange} value={password}/>
             <button className="sign-in-register-button" onClick={handleSignIn}>Sign In</button>
             <button className="create-account-button " onClick={()=>setIsRegistering(true)}>Create an account</button></>}
         </div>

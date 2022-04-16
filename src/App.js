@@ -1,9 +1,11 @@
 
 import './App.css';
-import Welcome from './components/Welcome';
-import CreateNewService from './components/NewService';
-import ServiceDetails from './components/serviceDetails';
-import HomePage from './components/HomePage';
+import Welcome from './pages/Welcome';
+import ServicePage from './pages/servicePage';
+import ServiceDetails from './pages/serviceDetails';
+import HomePage from './pages/HomePage';
+import Services from './pages/services';
+import PermanentDrawerLeft from'./components/test';
 import React from "react";
 import { createTheme , ThemeProvider} from '@mui/material/styles'
 
@@ -13,6 +15,9 @@ import {
   Route
 } from "react-router-dom";
 import { purple } from '@mui/material/colors';
+import AddService from './pages/addService';
+import Layout from './components/Layout';
+import { spacing } from '@mui/system';
 
 const theme = createTheme({
   palette:{
@@ -35,12 +40,19 @@ function App() {
     <ThemeProvider theme={theme}>
     <div >
        <Router>
-        <Routes>
+       <Routes >
           <Route path="/" element={<Welcome/>}/>
+       </Routes>
+       <Layout>
+        <Routes>
           <Route path="/homepage" element={<HomePage/>}/>
-          <Route path="/createNewService" element={<CreateNewService/>}/>
+          <Route path="/servicePage" element={<ServicePage/>}/>
+          <Route path="/services" element={<Services/>}/>
+          <Route path="/addService" element={<AddService/>}/>
           <Route path="/serviceDetails/:id" element={<ServiceDetails/>}/>
+          <Route path="/test" element={<PermanentDrawerLeft/>}/>
         </Routes>
+       </Layout>
     </Router>
     </div>
     </ThemeProvider>

@@ -15,7 +15,7 @@
   font-weight: normal;
   font-size: 100px;
   left: 46px;
-  top: 46px;
+  top: 0px;
   position: absolute;
   color: white;
 }
@@ -50,7 +50,7 @@
 }
 
 .sign-in-register-button {
-  background: black;
+  background: rgb(0, 0, 0);
   font-size: 20px;
   margin-top: 10px;
   font-family: "Roboto";

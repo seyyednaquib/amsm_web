@@ -10,10 +10,10 @@ import  {set, ref, onValue, remove, update,  } from "firebase/database";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HomeIcon from '@mui/icons-material/Home';
-
+import { Button } from "@mui/material";
 //icons
 
-export default function CreateNewService(){
+export default function ServicePage(){
 
     const navigate= useNavigate();
     const[service,setService] =useState('');
@@ -110,6 +110,12 @@ export default function CreateNewService(){
             )}) }
         {/* {isEdit ? (<CheckIcon  className="add-confirm-icon" onClick={confirmUpdate}>Confirm</CheckIcon>): (<AddIcon  className="add-confirm-icon" onClick={addService}>add</AddIcon >)}  */}
         <HomeIcon className="home-icon" onClick={ () =>navigate('/homepage')}>HOME</HomeIcon>
+        <Button  
+            color='primary'
+            variant="contained" 
+            onClick={ () =>navigate('/addService')}>
+            ADD NEW SERVICE 
+         </Button>
         <div className="register-service-container">
         {isAdding ? <>   
                 <input type="text"  placeholder="Service Name" value={addingInput.name} onChange={(e)=> setaddingInput({...addingInput,name:e.target.value})}/>

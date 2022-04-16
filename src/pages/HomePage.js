@@ -4,17 +4,15 @@ import { useNavigate } from "react-router-dom";
 import {auth} from "../firebase.js";
 import { signOut } from "firebase/auth";
 
+
 import SendIcon from '@mui/icons-material/Send';
-import { Container, makeStyles, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
 
 
-const useStyle = makeStyles({
-
-})
 export default function HomePage(){
-    const classes =useStyle();
+    
     const navigate = useNavigate();
     useEffect(()=>{
         auth.onAuthStateChanged(user => {
@@ -39,12 +37,30 @@ export default function HomePage(){
         </Typography>
         <form noValidate autoComplete="off">
             <TextField 
-                className="field"
                 variant="outlined"   
                 label="Service Name"
                 color="secondary"
                 fullWidth
                 required
+                sx={{
+                    marginTop:2,
+                    marginBottom:2,
+                    display:'block'
+                }}
+            />
+            <TextField 
+                variant="outlined"   
+                label="Description"
+                color="secondary"
+                fullWidth
+                required
+                multiline
+                rows={4}
+                sx={{
+                    marginTop:2,
+                    marginBottom:2,
+                    display:'block'
+                }}
             />
         </form>
         <Button 

@@ -1,0 +1,13 @@
+.page{
+    background: #f9f9f9;
+    width: 100%;
+}
+.drawer{
+    width: 240;
+}
+.drawerPaper{
+    width: 240;
+}
+.root{
+    display: inline;
+}
