@@ -128,6 +128,7 @@ export default function AddService(){
             color='primary'
             variant="contained"
             startIcon={<SendIcon/>}
+            sx={{marginBottom:2}}
             >
             Submit  
             </Button>

@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import './layout.css' 
 import { display, spacing, styled } from '@mui/system';
 import { List,ListItem ,ListItemText} from '@mui/material';
-import { HomeRepairService, HomeRepairServiceOutlined, SubjectOutlined } from '@mui/icons-material';
+import { HomeRepairService, HomeRepairServiceOutlined, PersonAddAlt1Outlined, SubjectOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -46,7 +46,12 @@ export default function Layout({children}) {
             text: 'Booked Service',
             icon: <HomeRepairServiceOutlined color='secondary'/>,
             path: '/'
-        }
+        },
+        {
+          text: 'Add Resident',
+          icon: <PersonAddAlt1Outlined color='secondary'/>,
+          path: '/addResident'
+      }
     ]
   return (
     <MyComponent>

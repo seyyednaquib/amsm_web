@@ -5,6 +5,7 @@ import ServicePage from './pages/servicePage';
 import ServiceDetails from './pages/serviceDetails';
 import HomePage from './pages/HomePage';
 import Services from './pages/services';
+import AddResident from './pages/addResident';
 import PermanentDrawerLeft from'./components/test';
 import React from "react";
 import { createTheme , ThemeProvider} from '@mui/material/styles'
@@ -50,6 +51,7 @@ function App() {
           <Route path="/services" element={<Services/>}/>
           <Route path="/addService" element={<AddService/>}/>
           <Route path="/serviceDetails/:id" element={<ServiceDetails/>}/>
+          <Route path="/addResident" element={<AddResident/>}/>
           <Route path="/test" element={<PermanentDrawerLeft/>}/>
         </Routes>
        </Layout>
