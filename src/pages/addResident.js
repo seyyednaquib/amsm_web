@@ -42,7 +42,7 @@ export default function AddResident() {
         const tempPassword= 'Melawis@123';
         createUserWithEmailAndPassword(auth,addingInput.rEmail+'@melawis.my',tempPassword).then(()=> { 
             console.log(auth.currentUser.uid);
-           set(ref(db,"/Resident/"+auth.currentUser.uid ), {
+           set(ref(db,"/residents/"+auth.currentUser.uid ), {
             residentId: auth.currentUser.uid,
             rName: addingInput.rName,
             rphone: addingInput.rPhone,
