@@ -2,9 +2,9 @@
 import './App.css';
 import Welcome from './pages/Welcome';
 import ServicePage from './pages/servicePage';
-import ServiceDetails from './pages/serviceDetails';
 import HomePage from './pages/HomePage';
 import Services from './pages/services';
+import Complaints from './pages/complaints';
 import AddResident from './pages/addResident';
 import PermanentDrawerLeft from'./components/test';
 import React from "react";
@@ -19,13 +19,15 @@ import { purple } from '@mui/material/colors';
 import AddService from './pages/addService';
 import Layout from './components/Layout';
 import { spacing } from '@mui/system';
+import ComplaintDetails from './pages/complaintDetails';
 
 const theme = createTheme({
   palette:{
       primary:{
-          main:'#fefefe'
+          main:'#fefefe',
+          dark: '#002884'
       },
-      secondary: purple
+      secondary: purple,
   },
   typography:{
     fontFamily:'Quicksand',
@@ -50,8 +52,9 @@ function App() {
           <Route path="/servicePage" element={<ServicePage/>}/>
           <Route path="/services" element={<Services/>}/>
           <Route path="/addService" element={<AddService/>}/>
-          <Route path="/serviceDetails/:id" element={<ServiceDetails/>}/>
+          <Route path="/complaintDetails/:id" element={<ComplaintDetails/>}/>
           <Route path="/addResident" element={<AddResident/>}/>
+          <Route path="/complaints" element={<Complaints></Complaints>}/>
           <Route path="/test" element={<PermanentDrawerLeft/>}/>
         </Routes>
        </Layout>

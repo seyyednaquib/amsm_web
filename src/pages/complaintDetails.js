@@ -10,14 +10,23 @@ import SendIcon from '@mui/icons-material/Send';
 import { Container, Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
-export default function ServiceDetails(){
+export default function ComplaintDetails(){
+    const {id}=useParams();
+    const navigate= useNavigate();
+    const[complaint,setComplaints] =useState('');
+    const [addingInput,setaddingInput] =useState({
+        complaintId: '' ,
+        complaintContent:'',
+        dateCreated:'',
+        ComplaintRespond:''
+    });
     useEffect(()=>{
         auth.onAuthStateChanged(user => {
             if(user){
-                onValue(ref(db, '/services/'+id),(snapshot) =>{
+                onValue(ref(db, '/complaints/'+id),(snapshot) =>{
                     if (snapshot.exists()) {
                         const data= snapshot.val();
-                        setServices(data);
+                        setComplaints(data);
                       } else {
                         console.log("No data available");
                       }
@@ -40,23 +49,15 @@ export default function ServiceDetails(){
             alert('Please Input Service Name')
             return
         }
-        const uidd= uid();
-            set(ref(db,"/services/"+uidd ), {
-                service: addingInput.name,
-                serviceid: uidd,
+            update(ref(db,"/complaints/"+id ), {
+                complaint: addingInput.name,
+                serviceid: id,
                 content: addingInput.content,
                 workingHours: addingInput.workingHours
             })
         setaddingInput('');
     };
-    const {id}=useParams();
-    const navigate= useNavigate();
-    const[service,setServices] =useState('');
-    const [addingInput,setaddingInput] =useState({
-        name:'',
-        content:'',
-        workingHours:''
-    });
+   
     return(
         <Container>
         <Typography 
@@ -65,7 +66,7 @@ export default function ServiceDetails(){
             color="textSecondary"
             gutterBottom
         >
-            New Services
+            New Services 
         </Typography>
         <form noValidate autoComplete="off" onSubmit={addService}>
             <TextField 
@@ -73,8 +74,10 @@ export default function ServiceDetails(){
                 variant="outlined"   
                 label="Service Name"
                 color="secondary"
+                defaultValue={complaint.complaintTitle}
+                value={complaint.complaintTitle}
                 fullWidth
-                required
+                disabled
                 sx={{
                     marginTop:2,
                     marginBottom:2,

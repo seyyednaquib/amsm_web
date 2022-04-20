@@ -1,26 +1,26 @@
 import React from 'react'
-import { Card, IconButton, Typography } from '@mui/material'
+import { Card, CardActionArea, IconButton, Typography } from '@mui/material'
 import { CardHeader } from '@mui/material'
 import { CardContent } from '@mui/material'
 import { DeleteOutlined } from '@mui/icons-material'
 
 
-export default function NodeCard({node, handleDelete}) {
+export default function NodeCard({node, title, subheader,content ,handleDelete, id }) {
   return (
     <div>
-        <Card elevation={1} sx={{height:150}}>
+        <Card elevation={1} sx={{height:150} }>
             <CardHeader
                 action={
-                <IconButton onClick={()=>handleDelete(node.serviceid)}>
+                <IconButton onClick={()=>handleDelete(id)}>
                  <DeleteOutlined/>
                 </IconButton>
                 }
-                title={node.service}
-                subheader={node.workingHours}
+                title={title}
+                subheader={subheader}
             />
-            <CardContent>
+            <CardContent >
                 <Typography variant='body2' color="textScondary">
-                    {node.content}
+                    {content}
                 </Typography>
             </CardContent>
         </Card>

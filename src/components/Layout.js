@@ -4,12 +4,13 @@ import { Typography } from '@mui/material'
 import './layout.css' 
 import { display, spacing, styled } from '@mui/system';
 import { List,ListItem ,ListItemText} from '@mui/material';
-import { HomeRepairService, HomeRepairServiceOutlined, PersonAddAlt1Outlined, SubjectOutlined } from '@mui/icons-material';
+import { HomeRepairService, HomeRepairServiceOutlined, PersonAddAlt1Outlined,   } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {auth} from "../firebase.js";
 import { signOut } from "firebase/auth";
+import MarkChatUnreadOutlinedIcon from '@mui/icons-material/MarkChatUnreadOutlined';
 
 const MyComponent = styled('div')({
   display: 'flex',
@@ -51,7 +52,12 @@ export default function Layout({children}) {
           text: 'Add Resident',
           icon: <PersonAddAlt1Outlined color='secondary'/>,
           path: '/addResident'
-      }
+      },
+      {
+        text: 'Complaints',
+        icon: <MarkChatUnreadOutlinedIcon color='secondary'/>,
+        path: '/complaints'
+    }
     ]
   return (
     <MyComponent>
