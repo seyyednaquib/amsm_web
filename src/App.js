@@ -25,7 +25,9 @@ const theme = createTheme({
   palette:{
       primary:{
           main:'#fefefe',
-          dark: '#002884'
+          dark: '#002884',
+          grey: '#DDDDDD',
+          darkgrey: '#A3A3A3'
       },
       secondary: purple,
   },

@@ -7,19 +7,14 @@ import {  useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 
 import SendIcon from '@mui/icons-material/Send';
-import { Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
 export default function ComplaintDetails(){
     const {id}=useParams();
     const navigate= useNavigate();
     const[complaint,setComplaints] =useState('');
-    const [addingInput,setaddingInput] =useState({
-        complaintId: '' ,
-        complaintContent:'',
-        dateCreated:'',
-        ComplaintRespond:''
-    });
+    const [addingInput,setaddingInput] =useState({ComplaintRespond:''});
     useEffect(()=>{
         auth.onAuthStateChanged(user => {
             if(user){
@@ -27,6 +22,7 @@ export default function ComplaintDetails(){
                     if (snapshot.exists()) {
                         const data= snapshot.val();
                         setComplaints(data);
+                        console.log(data)
                       } else {
                         console.log("No data available");
                       }
@@ -37,25 +33,17 @@ export default function ComplaintDetails(){
             }
         });
     },[]);
-    const addService = (e)=>{
+    const updateRespond = (e)=>{
         e.preventDefault()
         if(addingInput.name === ''){
-            alert('Please Input Service Name')
-            return
-        }else if(addingInput.content === ''){
-            alert('Please Input Service Description')
-            return
-        }else if(addingInput.workingHours === ''){
-            alert('Please Input Service Name')
+            alert('Please Input Respond')
             return
         }
             update(ref(db,"/complaints/"+id ), {
-                complaint: addingInput.name,
-                serviceid: id,
-                content: addingInput.content,
-                workingHours: addingInput.workingHours
+                ComplaintRespond: addingInput.ComplaintRespond,
             })
         setaddingInput('');
+        navigate('/complaints');
     };
    
     return(
@@ -66,28 +54,71 @@ export default function ComplaintDetails(){
             color="textSecondary"
             gutterBottom
         >
-            New Services 
+            Respond to Complaint 
         </Typography>
-        <form noValidate autoComplete="off" onSubmit={addService}>
+            <Typography variant="caption" sx={{marginLeft:1.5 ,color:'#646464'} } >
+                Title
+            </Typography>
+            <Box sx={{ 
+                    border: 1,
+                    borderRadius: 1,
+                    borderColor: 'primary.darkgrey',
+                    padding:1.5,
+                    display:'block'}}
+            >
+                <Typography variant="body2" >
+                {complaint.complaintTitle}
+                </Typography>
+            </Box>
+            <Typography variant="caption" sx={{marginLeft:1.5 ,color:'#646464'} } >
+                Resident ID 
+            </Typography>
+            <Box sx={{ 
+                    border: 1,
+                    borderRadius: 1,
+                    borderColor: 'primary.darkgrey',
+                    padding:1.5,
+                    display:'block'}}
+            >
+                <Typography variant="body2" >
+                {complaint.residentId}
+                </Typography>
+            </Box>
+            <Typography variant="caption" sx={{marginLeft:1.5 ,color:'#646464'} } >
+                Complaint Date
+            </Typography>
+            <Box sx={{ 
+                    border: 1,
+                    borderRadius: 1,
+                    borderColor: 'primary.darkgrey',
+                    padding:1.5,
+                    display:'block'}}
+            >
+                <Typography variant="body2" >
+                {complaint.dateCreated}
+                </Typography>
+            </Box>
+            <Typography variant="caption" sx={{marginLeft:1.5 ,color:'#646464'} } >
+                Content
+            </Typography>
+            <Box sx={{ 
+                    border: 1,
+                    borderRadius: 1,
+                    borderColor: 'primary.darkgrey',
+                    padding:1.5,
+                    display:'block',
+                    height:100
+                    }}
+            >
+                <Typography variant="body2" >
+                {complaint.complaintContent}
+                </Typography>
+            </Box>
+            <form noValidate autoComplete="off" onSubmit={updateRespond}>
             <TextField 
-               onChange={(e)=> setaddingInput({...addingInput,name:e.target.value})}
+                 onChange={(e)=> setaddingInput({...addingInput,ComplaintRespond:e.target.value})}
                 variant="outlined"   
-                label="Service Name"
-                color="secondary"
-                defaultValue={complaint.complaintTitle}
-                value={complaint.complaintTitle}
-                fullWidth
-                disabled
-                sx={{
-                    marginTop:2,
-                    marginBottom:2,
-                    display:'block'
-                }}
-            />
-            <TextField 
-                 onChange={(e)=> setaddingInput({...addingInput,content:e.target.value})}
-                variant="outlined"   
-                label="Description"
+                label="Respond"
                 color="secondary"
                 fullWidth
                 required
@@ -99,30 +130,16 @@ export default function ComplaintDetails(){
                     display:'block'
                 }}
             />
-            <TextField 
-                 onChange={(e)=> setaddingInput({...addingInput,workingHours:e.target.value})}
-                variant="outlined"   
-                label="Description"
-                color="secondary"
-                fullWidth
-                required
-                multiline
-                rows={4}
-                sx={{
-                    marginTop:2,
-                    marginBottom:2,
-                    display:'block'
-                }}
-            />
-        </form>
-        <Button 
+            <Button 
             type='submit'
             color='primary'
             variant="contained"
             startIcon={<SendIcon/>}
-        >
-        Submit  
-        </Button>
+            >
+            Submit  
+            </Button>
+        </form>
+  
         </Container>)
 }
 
