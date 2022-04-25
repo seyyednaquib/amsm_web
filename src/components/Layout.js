@@ -46,7 +46,7 @@ export default function Layout({children}) {
         {
             text: 'Booked Service',
             icon: <HomeRepairServiceOutlined color='secondary'/>,
-            path: '/'
+            path: '/bookedService'
         },
         {
           text: 'Add Resident',

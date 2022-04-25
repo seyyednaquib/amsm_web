@@ -1,7 +1,7 @@
 
 import './App.css';
 import Welcome from './pages/Welcome';
-import ServicePage from './pages/servicePage';
+import BookedServicePage from './pages/bookedService';
 import HomePage from './pages/HomePage';
 import Services from './pages/services';
 import Complaints from './pages/complaints';
@@ -51,7 +51,7 @@ function App() {
        <Layout>
         <Routes>
           <Route path="/homepage" element={<HomePage/>}/>
-          <Route path="/servicePage" element={<ServicePage/>}/>
+          <Route path="/bookedService" element={<BookedServicePage/>}/>
           <Route path="/services" element={<Services/>}/>
           <Route path="/addService" element={<AddService/>}/>
           <Route path="/complaintDetails/:id" element={<ComplaintDetails/>}/>

@@ -10,6 +10,7 @@ import { Container, FormControlLabel, FormLabel, Typography } from "@mui/materia
 import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
 import { Radio ,RadioGroup} from "@mui/material";
+import Services from "./services";
 export default function AddService(){
     const {id}=useParams();
     const navigate= useNavigate();
@@ -133,6 +134,7 @@ export default function AddService(){
             Submit  
             </Button>
         </form>
+        <Services sx={{marginTop:30 ,marginBottom:30}}/>
        
         </Container>)
 }
