@@ -8,7 +8,7 @@ import { DeleteOutlined } from '@mui/icons-material'
 export default function NodeCard({node, title, subheader,content ,handleDelete, id }) {
   return (
     <div>
-        <Card elevation={1} sx={{height:150} }>
+        <Card elevation={1} sx={{height:300} }>
             <CardHeader
                 action={
                 <IconButton onClick={()=>handleDelete(id)}>

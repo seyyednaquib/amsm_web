@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react";
 import { auth, db } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import  { ref, onValue, orderByChild } from "firebase/database";
+import  { ref, onValue, orderByChild, update } from "firebase/database";
 import { Button, CardActionArea,  CardActions,  Container, Grid ,Paper} from "@mui/material";
 import { remove } from 'firebase/database';
 import { Card,  IconButton, Typography } from '@mui/material'
@@ -16,7 +16,7 @@ export default function BookedServicePage() {
   useEffect(()=>{
       auth.onAuthStateChanged(user => {
           if(user){
-              onValue(ref(db, '/complaints'),(snapshot) =>{
+              onValue(ref(db, '/bookedService'),(snapshot) =>{
                   setComplaints([]);
                   const data = snapshot.val();
                   Object.values(data).map(complaints =>{return (
@@ -30,35 +30,49 @@ export default function BookedServicePage() {
       });
   },[]);
   
-  const handleDelete = (uid)=>{
-    console.log(uid);
-     // remove(ref(db, `/complaints/${uid}`));
+  const handleDelete = (id)=>{
+    console.log(id);
+      remove(ref(db, `/bookedService/${id}`));
+  }
+
+  const handleAccept = (id) => {
+    update(ref(db,"/bookedService/"+id ), {
+        status: 'ACCEPTED'
+    })
   }
   return(<Container  >
       <Grid container spacing={3} sx={{mt:0.1}}>
       {complaints.map(note => (
-          <Grid item xs={12} md={6} lg={4} key={note.complaintId} >
+          <Grid item xs={12} md={6} lg={4} key={note.bookingId} >
                <Card elevation={1} sx={{Maxheight:150 }}>
                 <CardHeader
                     action={
-                    <IconButton onClick={()=>handleDelete(note.complaintId)}>
+                    <IconButton onClick={()=>handleDelete(note.bookingId)}>
                     <DeleteOutlined/>
                     </IconButton>
                     }
-                    title={note.complaintTitle}
+                    title={note.ServiceTitle}
                     subheader={note.dateCreated}
                 />
                 <CardContent >
+                    
+                    <Typography variant='body1' color="secondary">
+                        Booking Date: {note.bookindDateAndTime}
+                    </Typography>
+                    <Typography variant='body1' color="textScondary">
+                        User: {note.residentId}
+                    </Typography>
                     <Typography variant='body2' color="textScondary">
-                        {note.complaintContent}
+                        Description: {note.description}
                     </Typography>
                 </CardContent>
+                
                 <CardActions>
-                 <Button variant={(note.ComplaintRespond == '') ? 'outlined' : 'contained'} size="small" 
-                 color={(note.ComplaintRespond == '') ? 'secondary' : 'warning'} 
-                 onClick={()=>(note.ComplaintRespond == '') ?  navigate('/complaintDetails/'+note.complaintId)  :  navigate('/complaints/')}
+                 <Button variant={(note.status == '') ? 'outlined' : 'contained'} size="small" 
+                 color={(note.status == '') ? 'secondary' : 'warning'} 
+                 onClick={()=>(note.status == '') ?  handleAccept(note.bookingId)  :  navigate('/bookedService/')}
                  > 
-                 {(note.ComplaintRespond == '') ? 'respond' : 'responded'}
+                 {(note.status == '') ? 'accept' : 'accepted'}
                   </Button>
                 </CardActions>
             </Card>
