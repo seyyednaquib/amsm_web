@@ -32,7 +32,8 @@ export default function Complaint() {
   
   const handleDelete = (uid)=>{
     console.log(uid);
-     // remove(ref(db, `/complaints/${uid}`));
+    remove(ref(db, `complaints/${uid}`));
+    console.log('Delete complaints/'+uid);
   }
   return(<Container  >
       <Grid container spacing={3} sx={{mt:0.1}}>
