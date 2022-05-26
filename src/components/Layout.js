@@ -33,6 +33,11 @@ export default function Layout({children}) {
     }
 
     const menuItems=[
+       {
+            text: 'Add Resident',
+            icon: <PersonAddAlt1Outlined color='secondary'/>,
+            path: '/addResident'
+        },
         {
             text: 'Services',
             icon: <HomeRepairServiceOutlined color='secondary'/>,
@@ -43,11 +48,7 @@ export default function Layout({children}) {
             icon: <HomeRepairServiceOutlined color='secondary'/>,
             path: '/bookedService'
         },
-        {
-          text: 'Add Resident',
-          icon: <PersonAddAlt1Outlined color='secondary'/>,
-          path: '/addResident'
-      },
+      
       {
         text: 'Complaints',
         icon: <MarkChatUnreadOutlinedIcon color='secondary'/>,

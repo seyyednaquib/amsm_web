@@ -22,7 +22,7 @@ export default function Welcome(){
     useEffect(()=>{
         auth.onAuthStateChanged((user)=>{
             if(user){
-                navigate('/servicePage');
+                navigate('/addService');
             }
         });
     })

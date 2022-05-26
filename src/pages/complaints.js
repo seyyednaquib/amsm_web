@@ -1,4 +1,10 @@
 import React,{useState,useEffect} from "react";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import { auth, db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import  { ref, onValue, orderByChild } from "firebase/database";
@@ -9,8 +15,11 @@ import { CardHeader } from '@mui/material'
 import { CardContent } from '@mui/material'
 import { DeleteOutlined } from '@mui/icons-material'
 import { red } from "@mui/material/colors";
+import { fontWeight } from "@mui/system";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-export default function Complaint() {
+
+export default function Complaints() {
   const navigate= useNavigate();
   const[complaints,setComplaints] =useState([]);
   useEffect(()=>{
@@ -35,37 +44,42 @@ export default function Complaint() {
     remove(ref(db, `complaints/${uid}`));
     console.log('Delete complaints/'+uid);
   }
-  return(<Container  >
-      <Grid container spacing={3} sx={{mt:0.1}}>
-      {complaints.map(note => (
-          <Grid item xs={12} md={6} lg={4} key={note.complaintId} >
-               <Card elevation={1} sx={{Maxheight:150 }}>
-                <CardHeader
-                    action={
-                    <IconButton onClick={()=>handleDelete(note.complaintId)}>
-                    <DeleteOutlined/>
-                    </IconButton>
-                    }
-                    title={note.complaintTitle}
-                    subheader={note.dateCreated}
-                />
-                <CardContent >
-                    <Typography variant='body2' color="textScondary">
-                        {note.complaintContent}
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                 <Button variant={(note.ComplaintRespond == '') ? 'outlined' : 'contained'} size="small" 
-                 color={(note.ComplaintRespond == '') ? 'secondary' : 'warning'} 
-                 onClick={()=>(note.ComplaintRespond == '') ?  navigate('/complaintDetails/'+note.complaintId)  :  navigate('/complaints/')}
+  return (
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+        <TableHead>
+          <TableRow >
+            <TableCell  sx={{fontWeight: 'bold' }}>Complaint </TableCell>
+            <TableCell sx={{fontWeight: 'bold' }}align="left">Date</TableCell>
+            <TableCell sx={{fontWeight: 'bold' }}align="left">Description</TableCell>
+            <TableCell sx={{fontWeight: 'bold' }} align="left">Status</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {complaints.map((row) => (
+            <TableRow
+              key={row.complaintId}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+              {row.complaintTitle}
+              </TableCell>
+              <TableCell align="left">{row.dateCreated}</TableCell>
+              <TableCell align="left">{row.complaintContent}</TableCell>
+              <TableCell align="left">
+                  <Button variant={(row.ComplaintRespond == '') ? 'outlined' : 'contained'} size="small" 
+                 color={(row.ComplaintRespond == '') ? 'secondary' : 'warning'} 
+                 onClick={()=>(row.ComplaintRespond == '') ?  navigate('/complaintDetails/'+row.complaintId)  :  navigate('/complaints/')}
                  > 
-                 {(note.ComplaintRespond == '') ? 'respond' : 'responded'}
+                 {(row.ComplaintRespond == '') ? 'respond' : 'responded'}
                   </Button>
-                </CardActions>
-            </Card>
-          </Grid>   
-      ))}
- 
-      </Grid>
-  </Container>)
+                  
+              </TableCell>
+              {row.ComplaintRespond == ''? null: <DeleteOutlineIcon sx={{marginTop:1.7}} color="warning" onClick={()=>handleDelete(row.complaintId)}/> }
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 }
