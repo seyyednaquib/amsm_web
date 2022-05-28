@@ -9,6 +9,7 @@ import Complaint2 from './pages/complaints_table';
 import AddResident from './pages/addResident';
 import PermanentDrawerLeft from'./components/test';
 import PostForm from './components/postForm';
+import AddAnnouncement from './pages/addAnnouncement';
 import React from "react";
 import Home from './pages/home';
 import { createTheme , ThemeProvider} from '@mui/material/styles'
@@ -56,6 +57,7 @@ function App() {
           <Route path="/homepage" element={<HomePage/>}/>
           <Route path="/home" element={<Home/>}/>
           <Route path="/notification" element={<PostForm/>}/>
+          <Route path="/addAnnouncement" element={<AddAnnouncement/>}/>
           <Route path="/bookedService" element={<BookedServicePage/>}/>
           <Route path="/services" element={<Services/>}/>
           <Route path="/addService" element={<AddService/>}/>

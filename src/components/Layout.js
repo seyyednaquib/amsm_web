@@ -39,6 +39,11 @@ export default function Layout({children}) {
             path: '/addResident'
         },
         {
+          text: 'Announcement',
+          icon: <HomeRepairServiceOutlined color='secondary'/>,
+          path: '/addAnnouncement'
+      },
+        {
             text: 'Services',
             icon: <HomeRepairServiceOutlined color='secondary'/>,
             path: '/addService'
