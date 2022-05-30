@@ -11,10 +11,7 @@ import  { ref, onValue, orderByChild } from "firebase/database";
 import { Button, CardActionArea,  CardActions,  Container, Grid ,Paper} from "@mui/material";
 import { remove ,update} from 'firebase/database';
 import { Card,  IconButton, Typography } from '@mui/material'
-import { CardHeader } from '@mui/material'
-import { CardContent } from '@mui/material'
-import { DeleteOutlined } from '@mui/icons-material'
-import { red } from "@mui/material/colors";
+import axios from 'axios'
 
 
 export default function Complaint2() {
@@ -41,12 +38,48 @@ export default function Complaint2() {
     console.log(id);
       remove(ref(db, `/bookedService/${id}`));
   }
+// check if time now is more than booked date and time then delete: 
+
+// var today = new Date(),
+//     time = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' +today.getHours() + ':' + today.getMinutes() ;
+// {bookedService.map((row) => (
+
+//    (row.bookindDateAndTime < time && row.status=='') ?  console.log(time +' '+ row.bookindDateAndTime +' PAST') :  console.log(time +' '+ row.bookindDateAndTime+' FUTURE')
+// ))}
+
 
   const handleAccept = (id) => {
     update(ref(db,"/bookedService/"+id ), {
         status: 'ACCEPTED'
     })
-
+    var data = JSON.stringify({
+      "to": "dVgLggccRE6pREQWAQfVfN:APA91bFkMmo7vtwKy0j8sQb7xTGKN1yVYI55FuzPNV5kCjtije8aNtZ2svL4Sp5Avo9AseZNSBfIAkJ2fwsJYta2A4pW6YmfvuZvgbp-OH0t67XGAouslJh5wiNBge1HNx6Zs-Pt5Aom",
+      "notification": {
+        "body": "Booking Status",
+        "title": "Booking Status Accepted"
+      },
+      "data": {
+        "route": "myservice"
+      }
+    });
+   
+   var config = {
+     method: 'post',
+     url: 'https://fcm.googleapis.com/fcm/send',
+     headers: { 
+       'Content-Type': 'application/json', 
+       'Authorization': 'key=AAAAXsbdkuk:APA91bHW3tgIsNoFWwCZYgDLEpLJ8gxLf_t5GgjdEln9w5e_LqkxDP0OWVQT_a0wIMH12Uili0OKsCmmhMrQKIuUXY5zPW1Y9u-pEQehwEkqIsuM3yP15hanE-BorWvCTfJfp8Nasu-H'
+     },
+     data : data
+   };
+   
+   axios(config)
+   .then(function (response) {
+     console.log(JSON.stringify(response.data));
+   })
+   .catch(function (error) {
+     console.log(error);
+   });
   }
   return (
     <TableContainer component={Paper}>

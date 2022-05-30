@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import './layout.css' 
 import { display, spacing, styled } from '@mui/system';
 import { List,ListItem ,ListItemText} from '@mui/material';
-import { HomeRepairService, HomeRepairServiceOutlined, PersonAddAlt1Outlined,   } from '@mui/icons-material';
+import { AnnouncementOutlined, HomeRepairService, HomeRepairServiceOutlined, PersonAddAlt1Outlined,   } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -40,7 +40,7 @@ export default function Layout({children}) {
         },
         {
           text: 'Announcement',
-          icon: <HomeRepairServiceOutlined color='secondary'/>,
+          icon: <MarkChatUnreadOutlinedIcon color='secondary'/>,
           path: '/addAnnouncement'
       },
         {
@@ -56,7 +56,7 @@ export default function Layout({children}) {
       
       {
         text: 'Complaints',
-        icon: <MarkChatUnreadOutlinedIcon color='secondary'/>,
+        icon: <AnnouncementOutlined color='secondary'/>,
         path: '/complaints'
     }
     ]

@@ -1,6 +1,6 @@
 import React,{ useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { uid } from "uid";
+import axios from 'axios';
 import { auth, db } from "../firebase";
 import  { set,ref, onValue, remove, update,  } from "firebase/database";
 import {  useNavigate } from "react-router-dom";
@@ -42,6 +42,34 @@ export default function ComplaintDetails(){
             update(ref(db,"/complaints/"+id ), {
                 ComplaintRespond: addingInput.ComplaintRespond,
             })
+            var data = JSON.stringify({
+                "to": "dVgLggccRE6pREQWAQfVfN:APA91bFkMmo7vtwKy0j8sQb7xTGKN1yVYI55FuzPNV5kCjtije8aNtZ2svL4Sp5Avo9AseZNSBfIAkJ2fwsJYta2A4pW6YmfvuZvgbp-OH0t67XGAouslJh5wiNBge1HNx6Zs-Pt5Aom",
+                "notification": {
+                  "body": addingInput.ComplaintRespond,
+                  "title": "Complaint Responded"
+                },
+                "data": {
+                  "route": "mycomplaint"
+                }
+              });
+             
+             var config = {
+               method: 'post',
+               url: 'https://fcm.googleapis.com/fcm/send',
+               headers: { 
+                 'Content-Type': 'application/json', 
+                 'Authorization': 'key=AAAAXsbdkuk:APA91bHW3tgIsNoFWwCZYgDLEpLJ8gxLf_t5GgjdEln9w5e_LqkxDP0OWVQT_a0wIMH12Uili0OKsCmmhMrQKIuUXY5zPW1Y9u-pEQehwEkqIsuM3yP15hanE-BorWvCTfJfp8Nasu-H'
+               },
+               data : data
+             };
+             
+             axios(config)
+             .then(function (response) {
+               console.log(JSON.stringify(response.data));
+             })
+             .catch(function (error) {
+               console.log(error);
+             });
         setaddingInput('');
         navigate('/complaints');
     };

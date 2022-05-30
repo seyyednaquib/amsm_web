@@ -12,23 +12,10 @@ import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
 import { Radio ,RadioGroup} from "@mui/material";
 import Services from "./services";
-export default function AddAnnouncement(){
+export default function AddLocalStore(){
     const navigate= useNavigate();
     const [imageUpload,setImageUpload] = useState(null);
     const [imageUrl,setImageUrl] =useState('');
-    const uploadImage = ()=>{
-        if(imageUpload==null)return;
-        const uidd= uid();
-        const storage = getStorage();
-        const imageRef= ref_storage(storage,'announcements/'+imageUpload.name+uidd);
-        uploadBytes(imageRef,imageUpload).then(()=> {
-           getDownloadURL(imageRef).then((url)=>{
-            setImageUrl(url);
-            alert(imageUrl);
-            });
-        })
-        alert(imageUrl);
-    }
     const [addingInput,setaddingInput] =useState({
         title:'',
         content:'',
@@ -41,17 +28,17 @@ export default function AddAnnouncement(){
             }
         });
     },[]);
-    const addAnnouncement = (e)=>{
+    const addLocalStore = (e)=>{
         e.preventDefault();
         if(addingInput.title === ''){
-            alert('Please Input Announcement title')
+            alert('Please Input Local Store Name')
             return
         }else if(addingInput.content === ''){
-            alert('Please Input Service Description')
+            alert('Please Input Local Store Description')
             return
         }
         const uidd= uid();
-       var tempimage ='https://p.kindpng.com/picc/s/20-203415_megaphone-with-hand-png-public-service-announcement-icon.png';
+       var tempimage ='https://img.freepik.com/free-vector/shop-with-sign-we-are-open_52683-38687.jpg?w=2000';
        var today = new Date(),
     time = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' +today.getHours() + ':' + today.getMinutes() ;
        if(imageUpload!=null){
@@ -121,7 +108,7 @@ export default function AddAnnouncement(){
         >
             New Announcement
         </Typography>
-        <form noValidate autoComplete="off" onSubmit={addAnnouncement}>
+        <form noValidate autoComplete="off" onSubmit={addLocalStore}>
             <TextField 
                onChange={(e)=> setaddingInput({...addingInput,title:e.target.value})}
                 variant="outlined"   

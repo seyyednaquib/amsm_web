@@ -24,7 +24,7 @@ export class PostForm extends Component {
               "title": "Firebase Cloud Message Title"
             },
             "data": {
-              "route": "RouteX"
+              "route": "announcement"
             }
           });
          
