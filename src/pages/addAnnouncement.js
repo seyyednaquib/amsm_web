@@ -1,21 +1,31 @@
 import React,{ useEffect, useState } from "react";
 import axios from 'axios'
 import { uid } from "uid";
-import { auth, db ,storage} from "../firebase";
+import { auth, db ,} from "../firebase";
 import { getStorage ,ref as ref_storage,uploadBytes,getDownloadURL } from "@firebase/storage";
-import  { set,ref , onValue, remove, update,  } from "firebase/database";
-
+import  { set,ref , onValue, remove,  } from "firebase/database";
+import Divider from '@mui/material/Divider';
 import {  useNavigate } from "react-router-dom";
 import SendIcon from '@mui/icons-material/Send';
-import { Container, FormControlLabel, FormLabel, Typography } from "@mui/material";
+import { Container, FormControlLabel, FormLabel, Typography ,Paper,} from "@mui/material";
 import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { UploadFileOutlined } from "@mui/icons-material";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import { Radio ,RadioGroup} from "@mui/material";
-import Services from "./services";
 export default function AddAnnouncement(){
     const navigate= useNavigate();
+    const[announcement,setAnnouncement] =useState([]);
+    const[resident,setResident] =useState([]);
     const [imageUpload,setImageUpload] = useState(null);
     const [imageUrl,setImageUrl] =useState('');
+    const [isImportant,setIsImportant]=useState('false');
     const uploadImage = ()=>{
         if(imageUpload==null)return;
         const uidd= uid();
@@ -35,12 +45,30 @@ export default function AddAnnouncement(){
         image:''
     });
     useEffect(()=>{
-        auth.onAuthStateChanged(user => {
-            if(!user){
-              navigate('/');
-            }
-        });
+      auth.onAuthStateChanged(user => {
+        if(user){
+            onValue(ref(db, '/announcements') ,(snapshot) =>{
+              setAnnouncement([]);
+                const data = snapshot.val();
+                Object.values(data).map(announcement =>{return (
+                  setAnnouncement((oldArray)=> [...oldArray,announcement]))
+                })
+            })
+            onValue(ref(db, '/residents'),(snapshot) =>{
+              setResident([]);
+              const data = snapshot.val();
+              Object.values(data).map(bookedService =>{return (
+                setResident((oldArray)=> [...oldArray,bookedService]))
+              })
+          })
+            console.log(announcement);
+        }else if(!user){
+            navigate('/');
+        }
+    });
     },[]);
+
+
     const addAnnouncement = (e)=>{
         e.preventDefault();
         if(addingInput.title === ''){
@@ -51,9 +79,21 @@ export default function AddAnnouncement(){
             return
         }
         const uidd= uid();
-       var tempimage ='https://p.kindpng.com/picc/s/20-203415_megaphone-with-hand-png-public-service-announcement-icon.png';
-       var today = new Date(),
-    time = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' +today.getHours() + ':' + today.getMinutes() ;
+       var tempimage ='https://www.kindpng.com/picc/m/20-203415_megaphone-with-hand-png-public-service-announcement-icon.png';
+       var today = new Date();
+       let newDate = new Date();
+let date = newDate.getDate();
+let month = newDate.getMonth() + 1 ;
+month = (today.getMonth() + 1 <10) ? '0'+month :  month;
+date = (today.getDate()  <10) ? '0'+date :  date;
+let hours = today.getHours();
+hours = (today.getHours()  <10) ? '0'+hours :  hours;
+let minute = today.getMinutes();
+minute =  (today.getMinutes()  <10) ? '0'+minute :  minute;
+let year = newDate.getFullYear();
+    var time = today.getFullYear() + '-' +  month + '-' + date+ ' ' +hours + ':' + minute ;
+    //var time = year ;
+
        if(imageUpload!=null){
         const storage = getStorage();
         const imageRef= ref_storage(storage,'announcements/'+imageUpload.name+uidd);
@@ -65,6 +105,7 @@ export default function AddAnnouncement(){
            serviceid: uidd,
            content: addingInput.content,
            ImgUrl: url,
+           important: isImportant,
            dateCreated: time
        })
             });
@@ -72,9 +113,10 @@ export default function AddAnnouncement(){
        }else{
         set(ref(db,"/announcements/"+uidd ), {
             title: addingInput.title,
-          serviceid: uidd,
+            serviceid: uidd,
           content: addingInput.content,
           ImgUrl: tempimage,
+          important: isImportant,
           dateCreated: time
       })
        }
@@ -111,6 +153,11 @@ export default function AddAnnouncement(){
         navigate('/addService')
     };
 
+    const handleDelete = (uid)=>{
+      console.log(uid);
+      remove(ref(db, `announcements/${uid}`));
+      console.log('Delete announcements/'+uid);
+    }
     return(
         <Container>
         <Typography 
@@ -135,7 +182,13 @@ export default function AddAnnouncement(){
                     display:'block'
                 }}
             />
-               <input type="file" onChange={(event)=>{setImageUpload(event.target.files[0])}}/>
+               {/* <input type="file" onChange={(event)=>{setImageUpload(event.target.files[0])}}/> */}
+               <Button variant="contained" component="label" endIcon={<UploadFileOutlined />}>
+                Upload Picture <input type="file" hidden onChange={(event)=>{setImageUpload(event.target.files[0])} } />
+              </Button>
+              { imageUpload!==null ? <Typography variant="p" marginLeft={2}  >
+              Uploaded
+              </Typography> : null }
             
             <TextField 
                  onChange={(e)=> setaddingInput({...addingInput,content:e.target.value})}
@@ -152,18 +205,47 @@ export default function AddAnnouncement(){
                     display:'block'
                 }}
             />
+             <FormLabel>Shows after login</FormLabel>
+            <RadioGroup value={isImportant} onChange={(e) => setIsImportant(e.target.value)}>
+                <FormControlLabel control={<Radio color="secondary"/>} value="false" label="No" />
+                <FormControlLabel control={<Radio color="secondary"/>} value="true" label="Yes" />
+            </RadioGroup>
              <Button 
             type='submit'
             color='primary'
             variant="contained"
             startIcon={<SendIcon/>}
-            sx={{marginBottom:2}}
+            sx={{marginTop:2 , marginBottom:4}}
             >
             Submit  
             </Button>
+            <Divider sx={{ borderBottomWidth: 5,marginBottom:2 }} />
         </form>
-      
-       
+        <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+        <TableHead>
+          <TableRow >
+          <TableCell sx={{fontWeight: 'bold' ,minWidth: 120}}align="left">Posted</TableCell>
+            <TableCell  sx={{fontWeight: 'bold' }}>Title</TableCell>
+            <TableCell sx={{fontWeight: 'bold' }} align="left">Content</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {announcement.sort((a, b) => a.dateCreated > b.dateCreated ? -1 : 1).map((row) => (
+            <TableRow
+              key={row.applyId }
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell align="left">{row.dateCreated} </TableCell>
+              <TableCell align="left">{row.title}</TableCell>
+              <TableCell align="left">{row.content}</TableCell>
+              <TableCell align="left"> <DeleteOutlineIcon sx={{marginTop:1.3}} color="warning" onClick={()=>handleDelete(row.serviceid)}/> </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    <div style={{  height:30 }}>  </div>
         </Container>)
 }
 

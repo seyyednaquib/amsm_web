@@ -12,14 +12,16 @@ import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
 import { Radio ,RadioGroup} from "@mui/material";
 import Services from "./services";
+import { UploadFileOutlined } from "@mui/icons-material";
 export default function AddLocalStore(){
     const navigate= useNavigate();
     const [imageUpload,setImageUpload] = useState(null);
     const [imageUrl,setImageUrl] =useState('');
+    const [category,setCategory]=useState('false');
     const [addingInput,setaddingInput] =useState({
-        title:'',
+        name:'',
         content:'',
-        image:''
+        coordinate:''
     });
     useEffect(()=>{
         auth.onAuthStateChanged(user => {
@@ -30,26 +32,35 @@ export default function AddLocalStore(){
     },[]);
     const addLocalStore = (e)=>{
         e.preventDefault();
-        if(addingInput.title === ''){
+        if(addingInput.name === ''){
             alert('Please Input Local Store Name')
             return
         }else if(addingInput.content === ''){
             alert('Please Input Local Store Description')
             return
+        }else if(category==''){
+          alert('Please Choose Category')
+            return
+        }else if(addingInput.coordinate === ''){
+          alert('Please Choose Category')
+            return
         }
+        
         const uidd= uid();
-       var tempimage ='https://img.freepik.com/free-vector/shop-with-sign-we-are-open_52683-38687.jpg?w=2000';
+       var tempimage ='https://cdn.pixabay.com/photo/2020/11/20/17/15/local-store-5762254_960_720.png';
        var today = new Date(),
     time = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' +today.getHours() + ':' + today.getMinutes() ;
        if(imageUpload!=null){
         const storage = getStorage();
-        const imageRef= ref_storage(storage,'announcements/'+imageUpload.name+uidd);
+        const imageRef= ref_storage(storage,'localstore/'+imageUpload.name+uidd);
         uploadBytes(imageRef,imageUpload).then(()=> {
            getDownloadURL(imageRef).then((url)=>{
             console.log(url);
-            set(ref(db,"/announcements/"+uidd ), {
-             title: addingInput.title,
-           serviceid: uidd,
+            set(ref(db,"/localstore/"+uidd ), {
+           name: addingInput.name,
+           storeId: uidd,
+           category: category,
+           coordinate: addingInput.coordinate,
            content: addingInput.content,
            ImgUrl: url,
            dateCreated: time
@@ -57,43 +68,22 @@ export default function AddLocalStore(){
             });
         }) 
        }else{
-        set(ref(db,"/announcements/"+uidd ), {
-            title: addingInput.title,
-          serviceid: uidd,
+        set(ref(db,"/localstore/"+uidd ), {
+          name: addingInput.name,
+          storeId: uidd,
+          category: category,
+          coordinate: addingInput.coordinate,
           content: addingInput.content,
           ImgUrl: tempimage,
           dateCreated: time
       })
        }
-       var data = JSON.stringify({
-        "to": "dVgLggccRE6pREQWAQfVfN:APA91bFkMmo7vtwKy0j8sQb7xTGKN1yVYI55FuzPNV5kCjtije8aNtZ2svL4Sp5Avo9AseZNSBfIAkJ2fwsJYta2A4pW6YmfvuZvgbp-OH0t67XGAouslJh5wiNBge1HNx6Zs-Pt5Aom",
-        "notification": {
-          "body": addingInput.content,
-          "title": addingInput.title
-        },
-        "data": {
-          "route": "announcement"
-        }
-      });
-     
-     var config = {
-       method: 'post',
-       url: 'https://fcm.googleapis.com/fcm/send',
-       headers: { 
-         'Content-Type': 'application/json', 
-         'Authorization': 'key=AAAAXsbdkuk:APA91bHW3tgIsNoFWwCZYgDLEpLJ8gxLf_t5GgjdEln9w5e_LqkxDP0OWVQT_a0wIMH12Uili0OKsCmmhMrQKIuUXY5zPW1Y9u-pEQehwEkqIsuM3yP15hanE-BorWvCTfJfp8Nasu-H'
-       },
-       data : data
-     };
-     
-     axios(config)
-     .then(function (response) {
-       console.log(JSON.stringify(response.data));
-     })
-     .catch(function (error) {
-       console.log(error);
-     });
-
+       if(category=='restaurant'){
+        alert('Restaurant Added');
+       }else{
+        alert('Store Added');
+       }
+      
         setaddingInput('');
         navigate('/addService')
     };
@@ -106,13 +96,13 @@ export default function AddLocalStore(){
             color="textSecondary"
             gutterBottom
         >
-            New Announcement
+            Add Local Store
         </Typography>
         <form noValidate autoComplete="off" onSubmit={addLocalStore}>
             <TextField 
-               onChange={(e)=> setaddingInput({...addingInput,title:e.target.value})}
+               onChange={(e)=> setaddingInput({...addingInput,name:e.target.value})}
                 variant="outlined"   
-                label="Announcement Title"
+                label="Store name"
                 color="secondary"
                 fullWidth
                 required
@@ -122,12 +112,38 @@ export default function AddLocalStore(){
                     display:'block'
                 }}
             />
-               <input type="file" onChange={(event)=>{setImageUpload(event.target.files[0])}}/>
-            
+               {/* <input type="file" onChange={(event)=>{setImageUpload(event.target.files[0])}}/> */}
+               <Button variant="contained" component="label" endIcon={<UploadFileOutlined />}>
+                Upload Picture <input type="file" hidden onChange={(event)=>{setImageUpload(event.target.files[0])} } />
+              </Button>
+              { imageUpload!==null ? <Typography variant="p" marginLeft={2}  >
+              Uploaded
+              </Typography> : null }
+
             <TextField 
                  onChange={(e)=> setaddingInput({...addingInput,content:e.target.value})}
                 variant="outlined"   
-                label="Announcement Content"
+                label="Description"
+                color="secondary"
+                fullWidth
+                required
+                multiline
+                rows={4}
+                sx={{
+                    marginTop:2,
+                    marginBottom:2,
+                    display:'block'
+                }}
+            />
+             <FormLabel>Category *</FormLabel>
+            <RadioGroup value={category} onChange={(e) => setCategory(e.target.value)}>
+                <FormControlLabel control={<Radio color="secondary"/>} value="store" label="Store" />
+                <FormControlLabel control={<Radio color="secondary"/>} value="restaurant" label="Restaurant" />
+            </RadioGroup>
+            <TextField 
+                 onChange={(e)=> setaddingInput({...addingInput,coordinate:e.target.value})}
+                variant="outlined"   
+                label="Latitude,Longtitute"
                 color="secondary"
                 fullWidth
                 required

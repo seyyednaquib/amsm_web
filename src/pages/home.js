@@ -1,6 +1,10 @@
 import React, { useState } from "react";
-import BarChart from "../components/BarChart";
-import './home.css';
+import './home.scss'
+import Sidebar from '../components/sidebar/Sidebar'
+import Navbar from '../components/navbar/Navbar'
+import Widget from '../components/widget/Widget'
+import Feature from '../components/feature/Feature'
+import Chart from '../components/chart/Chart'
 export const UserData = [
   {
     id: 1,
@@ -34,17 +38,25 @@ export const UserData = [
   },
 ];
 const Home = () => {
-  const [userData,setUserData]=useState({
-    labels: UserData.map((data)=>data.year),
-    dataSet:[{
-      label:"Users Gained",
-      data: UserData.map((data)=>data.userGain),
-    }]
-  });  
+
   return (
-       <div>
-         <BarChart chartData={userData}></BarChart>
-         </div>
+     
+         <div className="home">
+        <Sidebar />
+        <div className="homeContainer">
+          <Navbar />
+          <div className='widgets'>
+            <Widget type='users' />
+            <Widget type='orders' />
+            <Widget type='earnings' />
+            <Widget type='balance' />
+          </div>
+          <div className="charts">
+            <Feature />
+            <Chart />
+          </div>
+        </div>
+    </div>
       );
 }
  

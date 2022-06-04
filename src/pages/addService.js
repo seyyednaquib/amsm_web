@@ -6,7 +6,7 @@ import  { set,ref, onValue, remove, update,  } from "firebase/database";
 import {  useNavigate } from "react-router-dom";
 
 import SendIcon from '@mui/icons-material/Send';
-import { Container, FormControlLabel, FormLabel, Typography } from "@mui/material";
+import { Container, Divider, FormControlLabel, FormLabel, Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
 import { Radio ,RadioGroup} from "@mui/material";
@@ -133,6 +133,7 @@ export default function AddService(){
             >
             Submit  
             </Button>
+            <Divider sx={{ borderBottomWidth: 5,marginBottom:2 }} />
         </form>
         <Services sx={{marginTop:30 ,marginBottom:30}}/>
        

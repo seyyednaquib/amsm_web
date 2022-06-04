@@ -11,7 +11,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import {auth} from "../firebase.js";
 import { signOut } from "firebase/auth";
 import MarkChatUnreadOutlinedIcon from '@mui/icons-material/MarkChatUnreadOutlined';
-
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 const MyComponent = styled('div')({
   display: 'flex',
 });
@@ -58,7 +59,17 @@ export default function Layout({children}) {
         text: 'Complaints',
         icon: <AnnouncementOutlined color='secondary'/>,
         path: '/complaints'
-    }
+    },
+    {
+      text: 'Local Store',
+      icon: <StorefrontIcon color='secondary'/>,
+      path: '/addLocalStore'
+  },
+  {
+    text: 'Work Permit',
+    icon: <ReceiptLongIcon color='secondary'/>,
+    path: '/workpermit'
+}
     ]
   return (
     <MyComponent>

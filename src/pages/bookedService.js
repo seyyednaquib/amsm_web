@@ -7,17 +7,19 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { auth, db } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import  { ref, onValue, orderByChild } from "firebase/database";
+import  { ref, onValue, orderByChild, getDatabase, get ,child} from "firebase/database";
 import { Button, CardActionArea,  CardActions,  Container, Grid ,Paper} from "@mui/material";
 import { remove ,update} from 'firebase/database';
 import { Card,  IconButton, Typography } from '@mui/material'
 import axios from 'axios'
+import { async } from "@firebase/util";
 
 
 export default function Complaint2() {
   const navigate= useNavigate();
   const[bookedService,setBookedService] =useState([]);
-  const[userName,setUsername] =useState([]);
+  const[resident,setResident] =useState([]);
+  var username ;
   useEffect(()=>{
       auth.onAuthStateChanged(user => {
           if(user){
@@ -28,6 +30,13 @@ export default function Complaint2() {
                       setBookedService((oldArray)=> [...oldArray,bookedService]))
                   })
               })
+              onValue(ref(db, '/residents'),(snapshot) =>{
+                setResident([]);
+                const data = snapshot.val();
+                Object.values(data).map(bookedService =>{return (
+                  setResident((oldArray)=> [...oldArray,bookedService]))
+                })
+            })
           }else if(!user){
               navigate('/');
           }
@@ -38,14 +47,14 @@ export default function Complaint2() {
     console.log(id);
       remove(ref(db, `/bookedService/${id}`));
   }
-// check if time now is more than booked date and time then delete: 
 
-// var today = new Date(),
-//     time = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' +today.getHours() + ':' + today.getMinutes() ;
-// {bookedService.map((row) => (
+    const getUsername =(residentId) =>{
+    const dbRef = ref(getDatabase());
+        get(child(dbRef, `residents/${residentId}/rName`)).then((snapshot) => {
+          console.log(snapshot.val());
+      })
 
-//    (row.bookindDateAndTime < time && row.status=='') ?  console.log(time +' '+ row.bookindDateAndTime +' PAST') :  console.log(time +' '+ row.bookindDateAndTime+' FUTURE')
-// ))}
+};
 
 
   const handleAccept = (id) => {
@@ -88,7 +97,8 @@ export default function Complaint2() {
           <TableRow>
             <TableCell sx={{fontWeight: 'bold' }}>Booked Service </TableCell>
             <TableCell sx={{fontWeight: 'bold' }} align="left">DateTime</TableCell>
-            <TableCell sx={{fontWeight: 'bold' }} align="left">Resident ID</TableCell>
+            <TableCell sx={{fontWeight: 'bold' }} align="left">Resident Name</TableCell>
+            <TableCell sx={{fontWeight: 'bold' }} align="left">Unit No</TableCell>
             <TableCell sx={{fontWeight: 'bold' }} align="left">Description</TableCell>
             <TableCell sx={{fontWeight: 'bold' }}  align="left">Status</TableCell>
           </TableRow>
@@ -101,7 +111,12 @@ export default function Complaint2() {
             >
               <TableCell align="left">{row.ServiceTitle}</TableCell>
               <TableCell align="left">{row.bookindDateAndTime}</TableCell>
-              <TableCell align="left">{row.residentId}</TableCell>
+              {resident.map((r) => (
+                (row.residentId==r.residentId) ?  <TableCell align="left">{r.rName}</TableCell>  : ''
+              ))}
+              {resident.map((r) => (
+                (row.residentId==r.residentId) ?  <TableCell align="left">{r.rUnit}</TableCell>  : ''
+              ))}
               <TableCell align="left">{row.description}</TableCell>
               <TableCell align="left">
               <Button variant={(row.status == '') ? 'outlined' : 'contained'} size="small" 

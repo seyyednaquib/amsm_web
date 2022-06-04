@@ -22,6 +22,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 export default function Complaints() {
   const navigate= useNavigate();
   const[complaints,setComplaints] =useState([]);
+  const[resident,setResident] =useState([]);
   useEffect(()=>{
       auth.onAuthStateChanged(user => {
           if(user){
@@ -32,6 +33,13 @@ export default function Complaints() {
                       setComplaints((oldArray)=> [...oldArray,complaints]))
                   })
               })
+              onValue(ref(db, '/residents'),(snapshot) =>{
+                setResident([]);
+                const data = snapshot.val();
+                Object.values(data).map(bookedService =>{return (
+                  setResident((oldArray)=> [...oldArray,bookedService]))
+                })
+            })
               console.log(complaints);
           }else if(!user){
               navigate('/');
@@ -51,12 +59,14 @@ export default function Complaints() {
           <TableRow >
             <TableCell  sx={{fontWeight: 'bold' }}>Complaint </TableCell>
             <TableCell sx={{fontWeight: 'bold' }}align="left">Date</TableCell>
+            <TableCell sx={{fontWeight: 'bold' }} align="left">Resident Name</TableCell>
+            <TableCell sx={{fontWeight: 'bold' }} align="left">Unit No</TableCell>
             <TableCell sx={{fontWeight: 'bold' }}align="left">Description</TableCell>
             <TableCell sx={{fontWeight: 'bold' }} align="left">Status</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {complaints.map((row) => (
+          {complaints.sort((a, b) => a.dateCreated > b.dateCreated ? -1 : 1).map((row) => (
             <TableRow
               key={row.complaintId}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -65,6 +75,12 @@ export default function Complaints() {
               {row.complaintTitle}
               </TableCell>
               <TableCell align="left">{row.dateCreated}</TableCell>
+              {resident.map((r) => (
+                (row.residentId==r.residentId) ?  <TableCell align="left">{r.rName}</TableCell>  : ''
+              ))}
+              {resident.map((r) => (
+                (row.residentId==r.residentId) ?  <TableCell align="left">{r.rUnit}</TableCell>  : ''
+              ))}
               <TableCell align="left">{row.complaintContent}</TableCell>
               <TableCell align="left">
                   <Button variant={(row.ComplaintRespond == '') ? 'outlined' : 'contained'} size="small" 

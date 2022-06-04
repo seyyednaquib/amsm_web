@@ -6,6 +6,8 @@ import HomePage from './pages/HomePage';
 import Services from './pages/services';
 import Complaints from './pages/complaints';
 import Complaint2 from './pages/complaints_table';
+import WorkPermit from './pages/workpermit';
+import WorkPermitDetails from './pages/workPermitDetails';
 import AddResident from './pages/addResident';
 import PermanentDrawerLeft from'./components/test';
 import PostForm from './components/postForm';
@@ -24,6 +26,7 @@ import AddService from './pages/addService';
 import Layout from './components/Layout';
 import { spacing } from '@mui/system';
 import ComplaintDetails from './pages/complaintDetails';
+import AddLocalStore from './pages/addLocalStore';
 
 const theme = createTheme({
   palette:{
@@ -60,12 +63,15 @@ function App() {
           <Route path="/addAnnouncement" element={<AddAnnouncement/>}/>
           <Route path="/bookedService" element={<BookedServicePage/>}/>
           <Route path="/services" element={<Services/>}/>
+          <Route path='/addLocalStore' element={<AddLocalStore/>}/>
           <Route path="/addService" element={<AddService/>}/>
           <Route path="/complaintDetails/:id" element={<ComplaintDetails/>}/>
           <Route path="/addResident" element={<AddResident/>}/>
           <Route path="/complaints" element={<Complaints></Complaints>}/>
-          <Route path="/complaints_table" element={<Complaint2></Complaint2>}/>
+          <Route path="/workpermit" element={<WorkPermit></WorkPermit>}/>
+          <Route path="/workPermitDetails" element={<WorkPermitDetails></WorkPermitDetails>}/>
           <Route path="/test" element={<PermanentDrawerLeft/>}/>
+
         </Routes>
        </Layout>
     </Router>
