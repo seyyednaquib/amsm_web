@@ -22,7 +22,7 @@ export default function Welcome(){
     useEffect(()=>{
         auth.onAuthStateChanged((user)=>{
             if(user){
-                navigate('/addService');
+                navigate('/home');
             }
         });
     })
@@ -34,7 +34,7 @@ export default function Welcome(){
         setPassword(e.target.value);
     }
     const handleSignIn =() =>{
-        signInWithEmailAndPassword(auth,email,password).then(()=> {navigate('/homepage')}).catch((err) => alert(err.message));
+        signInWithEmailAndPassword(auth,email,password).then(()=> {navigate('/home')}).catch((err) => alert(err.message));
     }
     const handleRegister=() =>{
         if(registerInput.email !== registerInput.confirmEmail ){
@@ -50,7 +50,7 @@ export default function Welcome(){
                 email: registerInput.email,
                 name: registerInput.name,
             }); 
-            navigate('/homepage');}).catch((err=> alert(err.message)));
+            navigate('/home');}).catch((err=> alert(err.message)));
         
     }
 

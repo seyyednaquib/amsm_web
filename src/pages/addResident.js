@@ -50,7 +50,7 @@ export default function AddResident() {
             rEmail: addingInput.rEmail+'@melawis.my',
            }); 
            setaddingInput('');
-           navigate('/services');
+           navigate('/home');
         }).catch((err=> alert(err.message)));
     };
 

@@ -85,7 +85,7 @@ export default function AddLocalStore(){
        }
       
         setaddingInput('');
-        navigate('/addService')
+        navigate('/home')
     };
 
     return(

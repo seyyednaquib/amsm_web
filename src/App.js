@@ -2,7 +2,6 @@
 import './App.css';
 import Welcome from './pages/Welcome';
 import BookedServicePage from './pages/bookedService';
-import HomePage from './pages/HomePage';
 import Services from './pages/services';
 import Complaints from './pages/complaints';
 import Complaint2 from './pages/complaints_table';
@@ -57,7 +56,6 @@ function App() {
        </Routes>
        <Layout>
         <Routes>
-          <Route path="/homepage" element={<HomePage/>}/>
           <Route path="/home" element={<Home/>}/>
           <Route path="/notification" element={<PostForm/>}/>
           <Route path="/addAnnouncement" element={<AddAnnouncement/>}/>

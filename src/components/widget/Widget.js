@@ -1,13 +1,14 @@
-import './widget.scss'
+import './widget.css'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
 
-
-const Widget = ({type}) => {
-
+import React from 'react'
+import { Bar } from 'react-chartjs-2'
+import {Chart as ChartJS} from 'chart.js/auto'
+function Widget({type}) {
     let data;
 
     // temporary amount of money
@@ -27,9 +28,9 @@ const Widget = ({type}) => {
                 ),
             }
             break;
-        case 'orders':
+        case 'announcement':
             data = {
-                title: 'ORDERS',
+                title: 'Announcement Expand',
                 isMoney: false,
                 link: 'See All Oders',
                 icon: (
@@ -39,9 +40,9 @@ const Widget = ({type}) => {
                 ),
             }
             break;
-        case 'earnings':
+        case 'event':
             data = {
-                title: 'EARNINGS',
+                title: 'Event Expand',
                 isMoney: true,
                 link: 'View Earnings',
                 icon: (
@@ -51,18 +52,7 @@ const Widget = ({type}) => {
                 ),
             }
             break;
-        case 'balance':
-            data = {
-                title: 'BALLANCE',
-                isMoney: true,
-                link: 'See Details',
-                icon: (
-                    <AccountBalanceWalletOutlinedIcon className='icon' style={{
-                        color: 'purple', 
-                        backgroundColor: 'rgba(128, 0, 128, 0.2)'}} />
-                ),
-            }
-            break;
+      
         default:
             break;
     }
@@ -73,7 +63,7 @@ const Widget = ({type}) => {
     <div className='widget'>
         <div className='left'>
             <span className='title'>{data.title}</span>
-            <span className='counter'>{data.isMoney && '$'} {amount}</span>
+            <span className='counter'> {amount}</span>
             <span className='link'>{data.link}</span>
         </div>
         <div className='right'>
