@@ -11,6 +11,7 @@ import AddResident from './pages/addResident';
 import PermanentDrawerLeft from'./components/test';
 import PostForm from './components/postForm';
 import AddAnnouncement from './pages/addAnnouncement';
+import { Reminder } from './pages/reminder';
 import React from "react";
 import Home from './pages/home';
 import { createTheme , ThemeProvider} from '@mui/material/styles'
@@ -61,6 +62,7 @@ function App() {
           <Route path="/addAnnouncement" element={<AddAnnouncement/>}/>
           <Route path="/bookedService" element={<BookedServicePage/>}/>
           <Route path="/services" element={<Services/>}/>
+          <Route path='reminder' element={<Reminder/>}/>
           <Route path='/addLocalStore' element={<AddLocalStore/>}/>
           <Route path="/addService" element={<AddService/>}/>
           <Route path="/complaintDetails/:id" element={<ComplaintDetails/>}/>

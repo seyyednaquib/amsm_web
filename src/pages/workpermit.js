@@ -18,6 +18,7 @@ import { fontWeight } from "@mui/system";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 import { uid } from "uid";
 export default function WorkPermit() {
   const navigate= useNavigate();
@@ -80,26 +81,123 @@ export default function WorkPermit() {
      });
 }
 
-const generatePdf = (residentId) =>{
-    const doc = new jsPDF();
-    doc.text("Hello world!", 20, 10);
-    doc.html(document.querySelector('#content'),{
-        callback: function(pdf){
-           // pdf.save('myPdf.pdf');
-           doc.output('dataurlnewwindow');
-        }
+const generatePdf = (applyId,residentId,pdfPath) =>{
+    //const doc = new jsPDF();
+    const doc = new jsPDF("p", "pt", "a4"); // default values
+    //doc.text(residentId, 20, 10);
+    doc.setFont("helvetica", "bold");
+
+    // font size
+    doc.setFontSize(35);
+
+    // title, centered around x
+    // doc.text(text, x, y, flags, angle, align);
+    doc.text(
+      "WORKPERMIT \nMELAWIS APARMENT",
+      105 * 2.83,
+      20 * 2.83,
+      null,
+      null,
+      "center"
+    );
+
+
+
+    // Image subtitle
+    doc.setFontSize(11);
+     doc.setFont("italic");
+    doc.text(
+      "STATUS: Approved",
+      32 * 2.83,
+      60 * 2.83,
+      null,
+      null,
+      "center"
+    );
+     doc.line(20, 120, 580, 120);
+    // set back fontStyle to normal
+    doc.setFont("normal");
+
+    // Table
+    const usersCol = ['Requested by'	,'Unit'];
+    const usersCol1 = ['Date requested'	,'Start'	,'End'	];
+    const usersCol2 = [	'Company Name'	,'PIC Name'	,'PIC NRIC',	'PIC Phone No',	'No of Contractors'];
+    let row1,row2,row3;
+    resident.map(p=>{
+      if(residentId === p.residentId){
+        const data1 = [p.rName,p.rUnit];
+        row3= data1;
+      }
     })
-    //let file = doc.save(residentId+".pdf");
-        // if(file !=null ) console.log('ada');
-        //  const uidd= uid();
-        //  const storage = getStorage();
-        //   const fileRef= ref_storage(storage,'WorkPermit/'+file.name+uidd);
-        //  uploadBytes(fileRef,file).then(()=> {
-        //     getDownloadURL(fileRef).then((url)=>{
-        //      alert(fileRef);
-        //      });
-        //  })
-        // alert(imageUrl);
+    const usersRows1 = workPermit.map(u => {     
+      if(applyId === u.applyId) {
+        const data1 = [u.dateCrated, u.commencementDate, u.completionDate];
+        row1= data1;
+         const data2 = [u.companyName, u.picName, u.picNRIC, u.picphoneNo,u.numberOfcontractors];
+         row2=  data2;
+        console.log(u.applyId)
+      }
+      // const row = [u.companyName, u.picName, u.picNRIC];
+      // return row;
+    });
+
+    // const startY = 10 * 2.83;
+    const startY = 70 * 2.83;
+    doc.autoTable(usersCol, [row3], {
+      // startY: 180 * 2.83,
+      startY,
+      theme: "grid",
+      styles: {
+        fontSize: 11
+      }
+    });
+
+    const startY1 = 180 * 2.83;
+    doc.autoTable(usersCol1, [row1], {
+      // startY: 180 * 2.83,
+      startY1,
+      theme: "grid",
+      styles: {
+        fontSize: 11
+      }
+    });
+
+    const startY2=  200 * 2.83;
+    doc.autoTable(usersCol2, [row2], {
+      // startY: 180 * 2.83,
+      startY2,
+      theme: "grid",
+      styles: {
+        fontSize: 11
+      }
+    });
+
+    doc.text(
+      "DOCUMENT GENERATED\nNO NEED FOR SIGNATURE",
+      400 ,
+      doc.autoTable.previous.finalY + 30 // we can use doc.autoTable.previous to get previous table data
+    );
+    //doc.save('myPdf.pdf');
+    const file = doc.output('blob');
+    var string = doc.output('datauristring');
+    var embed = "<embed width='100%' height='100%' src='" + string + "'/>"
+    var x = window.open();
+    x.document.open();
+    x.document.write(embed);
+    x.document.close();
+
+    if(pdfPath===''){
+      const storage = getStorage();
+      const imageRef= ref_storage(storage,'applyWorkPermit/'+applyId+'.pdf');
+      uploadBytes(imageRef,file).then(()=> {
+         getDownloadURL(imageRef).then((url)=>{
+          console.log(url);
+          update(ref(db,"/applyWorkPermit/"+applyId ), {
+           pdfPath: url
+     })
+          });
+      }) 
+     }
     
 }
   const handleDelete = (uid)=>{
@@ -158,7 +256,7 @@ const generatePdf = (residentId) =>{
               </TableCell>
               {row.status == ''? null: <PictureAsPdfIcon sx={{marginTop:1.7}} color="secondary" /> }
               <DeleteOutlineIcon sx={{marginTop:1.3}} color="warning" onClick={()=>handleDelete(row.applyId)}/> 
-              {/* <ImportContactsOutlined onClick={()=>generatePdf(row.residentId)}/> */}
+             <ImportContactsOutlined onClick={()=>generatePdf(row.applyId,row.residentId,row.pdfPath)}/> 
             </TableRow>
           ))}
         </TableBody>
