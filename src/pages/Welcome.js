@@ -1,7 +1,7 @@
 import React, { useEffect, useState }  from "react";
 
 import './welcome.css';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword ,signOut} from "firebase/auth";
 import {auth,db} from "../firebase.js";
 import  {set, ref  } from "firebase/database";
 import { useNavigate } from "react-router-dom";
@@ -21,11 +21,18 @@ export default function Welcome(){
 
     useEffect(()=>{
         auth.onAuthStateChanged((user)=>{
-            if(user){
-                navigate('/home');
+            if(user ){
+                if(user.email=='management@melawis.my' || user.email=='security@melawis.my'){
+                    console.log(user.email);
+                }
+                else{
+                    //alert('only management can sign in');
+                   // console.log('you cannot sign in');
+                    signOut(auth).then(()=> {navigate('/')}).catch((err)=> {alert(err.message);});
+                }
             }
         });
-    })
+    },[]);
 
     const handleEmailChange =(e) =>{
         setEmail(e.target.value);
@@ -34,7 +41,11 @@ export default function Welcome(){
         setPassword(e.target.value);
     }
     const handleSignIn =() =>{
-        signInWithEmailAndPassword(auth,email,password).then(()=> {navigate('/home')}).catch((err) => alert(err.message));
+        signInWithEmailAndPassword(auth,email,password).then(()=> {
+             if(email =='security@melawis.my'){
+                navigate('/security')
+             }
+             else navigate('/home')}).catch((err) => alert(err.message));
     }
     const handleRegister=() =>{
         if(registerInput.email !== registerInput.confirmEmail ){

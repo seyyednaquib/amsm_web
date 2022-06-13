@@ -27,6 +27,8 @@ import Layout from './components/Layout';
 import { spacing } from '@mui/system';
 import ComplaintDetails from './pages/complaintDetails';
 import AddLocalStore from './pages/addLocalStore';
+import ValidateVisitor from './pages/security';
+import AddVisitor from './pages/addVisitor';
 
 const theme = createTheme({
   palette:{
@@ -70,6 +72,8 @@ function App() {
           <Route path="/complaints" element={<Complaints></Complaints>}/>
           <Route path="/workpermit" element={<WorkPermit></WorkPermit>}/>
           <Route path="/workPermitDetails" element={<WorkPermitDetails></WorkPermitDetails>}/>
+          <Route path="/security" element={<ValidateVisitor/>}/>
+          <Route path="/newVisitor" element={<AddVisitor/>}/>
           <Route path="/test" element={<PermanentDrawerLeft/>}/>
 
         </Routes>
