@@ -15,6 +15,7 @@ import MarkChatUnreadOutlinedIcon from '@mui/icons-material/MarkChatUnreadOutlin
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 const MyComponent = styled('div')({
   display: 'flex',
 });
@@ -88,7 +89,13 @@ export default function Layout({children}) {
     text: 'Work Permit',
     icon: <ReceiptLongIcon color='secondary'/>,
     path: '/workpermit'
+},
+{
+  text: 'Visitor Report',
+  icon: <AssessmentIcon color='secondary'/>,
+  path: '/visitorReport'
 }
+
     ]
 
     const menuItems2=[

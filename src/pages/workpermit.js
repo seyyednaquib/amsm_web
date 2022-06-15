@@ -254,9 +254,9 @@ const generatePdf = (applyId,residentId,pdfPath) =>{
                  {(row.status == '') ? 'accept' : 'accepted'}
                   </Button>
               </TableCell>
-              {row.status == ''? null: <PictureAsPdfIcon sx={{marginTop:1.7}} color="secondary" /> }
+              {row.status == ''? null: <PictureAsPdfIcon onClick={()=>generatePdf(row.applyId,row.residentId,row.pdfPath)}/>  }
               <DeleteOutlineIcon sx={{marginTop:1.3}} color="warning" onClick={()=>handleDelete(row.applyId)}/> 
-             <ImportContactsOutlined onClick={()=>generatePdf(row.applyId,row.residentId,row.pdfPath)}/> 
+             
             </TableRow>
           ))}
         </TableBody>

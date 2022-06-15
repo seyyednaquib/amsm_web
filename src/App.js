@@ -29,6 +29,7 @@ import ComplaintDetails from './pages/complaintDetails';
 import AddLocalStore from './pages/addLocalStore';
 import ValidateVisitor from './pages/security';
 import AddVisitor from './pages/addVisitor';
+import VisitorReport from './pages/visitorReport';
 
 const theme = createTheme({
   palette:{
@@ -74,6 +75,7 @@ function App() {
           <Route path="/workPermitDetails" element={<WorkPermitDetails></WorkPermitDetails>}/>
           <Route path="/security" element={<ValidateVisitor/>}/>
           <Route path="/newVisitor" element={<AddVisitor/>}/>
+          <Route path="/visitorReport" element={<VisitorReport/>}/>
           <Route path="/test" element={<PermanentDrawerLeft/>}/>
 
         </Routes>
