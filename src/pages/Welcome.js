@@ -84,7 +84,7 @@ export default function Welcome(){
             <>   <input type="email" placeholder="email" onChange={handleEmailChange} value={email}/>
             <input type="password" placeholder="password" onChange={handlePasswordChange} value={password}/>
             <button className="sign-in-register-button" onClick={handleSignIn}>Sign In</button>
-            <button className="create-account-button " onClick={()=>setIsRegistering(true)}>Create an account</button></>}
+             <button className="create-account-button " hidden onClick={()=>setIsRegistering(true)}>Create an account</button></>  }
         </div>
     </div>)
 }
