@@ -28,13 +28,14 @@ export default function Services(){
     
     const handleDelete = (uid)=>{
         console.log(uid);
-        //remove(ref(db, `/services/${uid}`));
+        remove(ref(db, `/services/${uid}`));
     }
+
     return(<Container  >
         <Grid container spacing={3} sx={{mt:0.1}}>
         {services.map(note => (
             <Grid item xs={12} md={6} lg={4} key={note.serviceid}>
-                <NodeCard node={note}  title={note.service}  content={note.content}  subheader={note.workingHours} handleDelete={handleDelete}></NodeCard>
+                <NodeCard node={note}  title={note.service}  content={note.content}  subheader={note.workingHours} onClick={()=>handleDelete(note.serviceid)}></NodeCard>
             </Grid>   
         ))}
         </Grid>

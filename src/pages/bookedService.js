@@ -13,7 +13,7 @@ import { remove ,update} from 'firebase/database';
 import { Card,  IconButton, Typography } from '@mui/material'
 import axios from 'axios'
 import { async } from "@firebase/util";
-
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 export default function Complaint2() {
   const navigate= useNavigate();
@@ -62,7 +62,7 @@ export default function Complaint2() {
         status: 'ACCEPTED'
     })
     var data = JSON.stringify({
-      "to": "dVgLggccRE6pREQWAQfVfN:APA91bFkMmo7vtwKy0j8sQb7xTGKN1yVYI55FuzPNV5kCjtije8aNtZ2svL4Sp5Avo9AseZNSBfIAkJ2fwsJYta2A4pW6YmfvuZvgbp-OH0t67XGAouslJh5wiNBge1HNx6Zs-Pt5Aom",
+      "to": "c6-rpcGETFOasHl596QH3x:APA91bFAEMaVaiPtIUMx6Xoh2xFXTZrzB48ZbynQ3xm6_-OfauYh_78egtWaPA1HxQLpIjdnIht5t85xS0pzt9iU4UjvxIRjtrX2v6948T3jzC0RKcnomjFIST4jGLDRNzl6DLaF2MBg",
       "notification": {
         "body": "Booking Status",
         "title": "Booking Status Accepted"
@@ -126,6 +126,7 @@ export default function Complaint2() {
                  {(row.status == '') ? 'accept' : 'accepted'}
                   </Button>
               </TableCell>
+              <DeleteOutlineIcon sx={{marginTop:1.3}} color="warning" onClick={()=>handleDelete(row.bookingId)}/> 
             </TableRow>
           ))}
         </TableBody>
